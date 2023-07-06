@@ -1,36 +1,50 @@
 package tyresz.codeupspringblog.controllers;
-
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import tyresz.codeupspringblog.models.Post;
+import tyresz.codeupspringblog.repositories.PostRepository;
+import java.util.List;
+import java.util.Optional;
 
+@AllArgsConstructor
 @Controller
 @RequestMapping("/post")
 public class PostController {
+    private final PostRepository postDao;
     @GetMapping()
-    @ResponseBody
-    public String post(){
-        return "post index page";
+    public String index(Model model){
+        List<Post> posts = postDao.findAll();
+        model.addAttribute("posts",posts);
+        return "post/index";
     }
-
     @GetMapping("{id}")
-    @ResponseBody
-    public String idpost(){
-        return "view an individual post";
+    public String FetchById(@PathVariable Long id, Model model){
+        Optional<Post> optionalPost = postDao.findById(id);
+        if (optionalPost.isEmpty()){
+            return "404";
+        }
+        Post post = optionalPost.get();
+        model.addAttribute("post",post);
+        return "post/show";
     }
 
     @GetMapping("/create")
-    @ResponseBody
-    public String create(){
-        return "view the form for creating a post";
+    public String showForm(){
+        return "post/create";
     }
 
     @PostMapping("/create")
-    @ResponseBody
-    public String postCreate(){
-        return "create a new post";
+    public String createPost(
+            @RequestParam String title
+            , @RequestParam String body){
+        Post post = new Post();
+        post.setTitle(title);
+        post.setBody(body);
+        postDao.save(post);
+        return "redirect:/post";
     }
-
 }
+
+
