@@ -4,7 +4,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import tyresz.codeupspringblog.models.Post;
+import tyresz.codeupspringblog.models.User;
 import tyresz.codeupspringblog.repositories.PostRepository;
+import tyresz.codeupspringblog.repositories.UserRepository;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -13,6 +16,7 @@ import java.util.Optional;
 @RequestMapping("/post")
 public class PostController {
     private final PostRepository postDao;
+    private final UserRepository userDao;
     @GetMapping()
     public String index(Model model){
         List<Post> posts = postDao.findAll();
@@ -42,6 +46,12 @@ public class PostController {
         Post post = new Post();
         post.setTitle(title);
         post.setBody(body);
+        Optional<User> optionalUser = userDao.findById(2L);
+        if (optionalUser.isEmpty()){
+            return "404";
+        }
+        User user = optionalUser.get();
+        post.setUser(user);
         postDao.save(post);
         return "redirect:/post";
     }

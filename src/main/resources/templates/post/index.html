@@ -10,6 +10,8 @@
 <ul>
   <li th:each="post : ${posts}">
     <a th:href="@{/post/{id}(id=${post.id})}" th:text="${post.title}"></a>
+    <p>Body: <span th:text="${post.body}"></span></p>
+    <p>Created by: <span th:text="${post.user.email}"></span></p>
   </li>
 </ul>
 <div th:replace="partials/script :: script"></div>
