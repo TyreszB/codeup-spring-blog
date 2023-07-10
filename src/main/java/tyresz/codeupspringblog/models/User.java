@@ -29,6 +29,6 @@ public class User {
     @Column(nullable = false,length = 100)
     private String password;
 
-    @OneToMany(cascade =CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "creator")
+    @OneToMany(cascade =CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "user")
     private List<Post> posts;
 }
