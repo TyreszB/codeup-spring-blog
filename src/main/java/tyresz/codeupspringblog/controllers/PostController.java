@@ -38,18 +38,14 @@ public class PostController {
     }
 
     @GetMapping("/create")
-    public String showForm(){
+    public String showForm(Model model){
+        model.addAttribute("post", new Post());
         return "post/create";
     }
 
     @PostMapping("/create")
-    public String createPost(
-            @RequestParam String title
-            , @RequestParam String body){
-        Post post = new Post();
-        post.setTitle(title);
-        post.setBody(body);
-        Optional<User> optionalUser = userDao.findById(2L);
+    public String createPost(@ModelAttribute Post post){
+        Optional<User> optionalUser = userDao.findById(1L);
         if (optionalUser.isEmpty()){
             return "404";
         }
@@ -74,6 +70,28 @@ public class PostController {
                 user.getUsername());
         postDao.save(post);
         return "redirect:/post";
+    }
+    @GetMapping("/{id}/edit")
+    public String showEditForm(@PathVariable Long id, @ModelAttribute("post") Post post) {
+        Optional<Post> optionalPost = postDao.findById(id);
+        if (optionalPost.isEmpty()){
+            return "404";
+        }
+        return "post/edit";
+    }
+    @PostMapping("/{id}/edit")
+    public String EditForm(@PathVariable Long id, @ModelAttribute("post") Post post){
+        String title = post.getTitle();
+        String body = post.getBody();
+        Optional<Post> optionalPost = postDao.findById(id);
+        if (optionalPost.isEmpty()){
+            return "404";
+        }
+        Post existingPost = optionalPost.get();
+        existingPost.setTitle(title);
+        existingPost.setBody(body);
+        postDao.save(existingPost);
+        return "redirect:/post/{id}";
     }
 }
 
