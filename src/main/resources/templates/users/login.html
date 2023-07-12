@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <div th:replace="partials/head :: head"></div>
+    <title>Log In</title>
+</head>
+<body>
+<div th:replace="partials/nav :: nav"></div>
+<div class="container">
+    <div class="card mt-5">
+        <h1 class=" card-header text-center">Log In</h1>
+        <div class="card-body">
+            <div class="text-center" th:if="${param.error}">
+                Invalid Username and Password.
+            </div>
+            <div class="text-center" th:if="${param.logout}">
+                You have been logged out successfully.
+            </div>
+            <form th:action="@{/login}" method="post">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="username" name="username" placeholder="Username">
+                    <label for="username">Username</label>
+                </div>
+                <div class="form-floating">
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+                    <label for="password">Password</label>
+                </div>
+                <div>
+                    <input type="submit" value="Log In" class="btn btn-primary mt-3"/>
+                </div>
+            </form>
+
+            <!--            <div class="form-floating mb-3">-->
+            <!--                <input id="username" name="username" type="text" class="form-control" placeholder="Username"/>-->
+            <!--                <label for="username" class="form-control">Username</label>-->
+            <!--            </div>-->
+            <!--            <div class="form-floating">-->
+            <!--                <input  type="password" class="form-control" placeholder="Password"/>-->
+            <!--                <label for="password" class="form-control">Password</label>-->
+            <!--            </div>-->
+        </div>
+    </div>
+</div>
+
+<div th:replace="partials/script :: script"></div>
+</body>
+</html>

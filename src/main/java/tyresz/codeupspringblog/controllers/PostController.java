@@ -1,5 +1,6 @@
 package tyresz.codeupspringblog.controllers;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,19 +15,26 @@ import java.util.Optional;
 
 @AllArgsConstructor
 @Controller
-@RequestMapping("/post")
+@RequestMapping("")
 public class PostController {
     private final PostRepository postDao;
     private final UserRepository userDao;
 
     private final EmailService emailService;
+
     @GetMapping()
+    public String home(){
+        return "home";
+    }
+    @GetMapping("/post")
     public String index(Model model){
+//        User loggedIn = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        User currentUser = userDao.getReferenceById(loggedIn.getId());
         List<Post> posts = postDao.findAll();
         model.addAttribute("posts",posts);
         return "post/index";
     }
-    @GetMapping("{id}")
+    @GetMapping("post/{id}")
     public String FetchById(@PathVariable Long id, Model model){
         Optional<Post> optionalPost = postDao.findById(id);
         if (optionalPost.isEmpty()){
@@ -37,13 +45,13 @@ public class PostController {
         return "post/show";
     }
 
-    @GetMapping("/create")
+    @GetMapping("post/create")
     public String showForm(Model model){
         model.addAttribute("post", new Post());
         return "post/create";
     }
 
-    @PostMapping("/create")
+    @PostMapping("post/create")
     public String createPost(@ModelAttribute Post post){
         Optional<User> optionalUser = userDao.findById(1L);
         if (optionalUser.isEmpty()){
@@ -71,7 +79,7 @@ public class PostController {
         postDao.save(post);
         return "redirect:/post";
     }
-    @GetMapping("/{id}/edit")
+    @GetMapping("post/{id}/edit")
     public String showEditForm(@PathVariable Long id, @ModelAttribute("post") Post post) {
         Optional<Post> optionalPost = postDao.findById(id);
         if (optionalPost.isEmpty()){
@@ -79,8 +87,8 @@ public class PostController {
         }
         return "post/edit";
     }
-    @PostMapping("/{id}/edit")
-    public String EditForm(@PathVariable Long id, @ModelAttribute("post") Post post){
+    @PostMapping("post/{id}/edit")
+    public String EditForm(@PathVariable Long id, @ModelAttribute Post post){
         String title = post.getTitle();
         String body = post.getBody();
         Optional<Post> optionalPost = postDao.findById(id);

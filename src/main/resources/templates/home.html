@@ -1,12 +1,15 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <meta charset="UTF-8" />
     <title>Home</title>
+    <div th:replace="partials/head :: head"></div>
 </head>
 <body>
 
+<div th:replace="partials/nav :: nav"></div>
+
 <h1>This is the home page</h1>
 
+<div th:replace="partials/script :: script"></div>
 </body>
 </html>

@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
   <title>All Posts</title>
   <div th:replace="partials/head :: head"></div>
 </head>
 <body>
 <div th:replace="partials/nav :: nav"></div>
+
 <h1>All Posts</h1>
 <ul>
   <li th:each="post : ${posts}">

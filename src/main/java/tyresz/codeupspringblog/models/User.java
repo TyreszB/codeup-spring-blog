@@ -23,12 +23,22 @@ public class User {
     @Column(nullable = false, length = 100)
     private String username;
 
-    @Column(nullable = false,length = 100)
+    @Column(nullable = false, length = 100)
     private String email;
 
-    @Column(nullable = false,length = 100)
+    @Column(nullable = false, length = 100)
     private String password;
 
-    @OneToMany(cascade =CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "user")
     private List<Post> posts;
+
+
+    public User(User copy) {
+        id = copy.id;
+        email = copy.email;
+        username = copy.username;
+        password = copy.password;
+    }
 }
+
+
